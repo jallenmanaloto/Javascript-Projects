@@ -1,0 +1,161 @@
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
+
+/*** Defining size of each Cells ***/
+/*** Defining size of Xs and Os in the cell ***/
+:root {
+  --cell-size: 100px;
+  --item-size: calc(var(--cell-size) * 0.9);
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.board {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: repeat(3, auto);
+}
+
+.cell {
+  height: var(--cell-size);
+  width: var(--cell-size);
+  background-color: white;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+}
+
+/*** Removing all side borders from the board ***/
+.cell:first-child,
+.cell:nth-child(2),
+.cell:nth-child(3) {
+  border-top: none;
+}
+
+.cell:nth-child(3n + 1) {
+  border-left: none;
+}
+
+.cell:nth-child(3n + 3) {
+  border-right: none;
+}
+
+.cell:last-child,
+.cell:nth-child(8),
+.cell:nth-child(7) {
+  border-bottom: none;
+}
+
+/**** Removing cursor for filled cell ****/
+.cell.x,
+.cell.circle {
+  cursor: not-allowed;
+}
+
+.cell.x::before,
+.cell.x::after,
+.cell.circle::before {
+  background-color: black;
+}
+
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+  background-color: lightgray;
+}
+
+/**** Creating the Xs and Os on Cell ****/
+/*** Redndering X marker ***/
+.cell.x::before,
+.cell.x::after,
+/*** Hover effect for whose turn in the game ***/
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+  content: "";
+  height: var(--item-size);
+  width: calc(var(--item-size) * 0.15);
+  position: absolute;
+}
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before {
+  transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after {
+  transform: rotate(-45deg);
+}
+
+/*** Redndering O marker ***/
+.cell.circle::before,
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+  height: var(--item-size);
+  width: var(--item-size);
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+  height: calc(var(--item-size) * 0.72);
+  width: calc(var(--item-size) * 0.72);
+  background-color: white;
+}
+
+/**** Rendering Winning Message ****/
+.winning-message {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 5.5rem;
+  font-family: sans-serif;
+}
+
+.winning-message button {
+  font-size: 4rem;
+  font-family: sans-serif;
+  font-weight: bolder;
+  background-color: white;
+  color: black;
+  padding: 0.2em 0.5em;
+  cursor: pointer;
+}
+
+.winning-message button:hover {
+  background-color: black;
+  color: white;
+  border: 1px white solid;
+}
+
+.winning-message.active {
+  display: flex;
+}
